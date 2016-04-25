@@ -13,10 +13,11 @@ class SpaceInvader < Gosu::Window
 
 
   def update
-    @player.right if Gosu::button_down?(Gosu::KbRight)
-    @player.left if Gosu::button_down?(Gosu::KbLeft)
+    @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.x >= 620
+    @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.x <= 15
     #@player.y -= 2 unless @player.collision?(320, 300)
     #@player.y %= 480
+    close if Gosu::button_down?(Gosu::KbEscape)
   end
 
   def draw
@@ -32,21 +33,21 @@ class Player
   attr_accessor :x, :y
   def initialize
     @x = 320
-    @y = 400
+    @y = 450
     @sprite = Gosu::Image.new("media/icon.png")
   end
 
 
   def draw
-    @sprite.draw(@x, @y, 1)
+    @sprite.draw_rot(@x, @y, 1, 0)
   end
 
   def left
-    @x -= 5# until @x == 5
+    @x -= 7# until @x == 5
   end
 
   def right
-    @x += 5 #until @x == 630
+    @x += 7 #until @x == 630
   end
 
   def collision?(barrier0, barrier1)
