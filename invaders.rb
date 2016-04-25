@@ -13,8 +13,8 @@ class SpaceInvader < Gosu::Window
 
 
   def update
-    @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.x >= 620
-    @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.x <= 15
+    @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
+    @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
     #@player.y -= 2 unless @player.collision?(320, 300)
     #@player.y %= 480
     close if Gosu::button_down?(Gosu::KbEscape)
@@ -43,18 +43,16 @@ class Player
   end
 
   def left
-    @x -= 7# until @x == 5
+    @x -= 7
   end
 
   def right
-    @x += 7 #until @x == 630
+    @x += 7 
   end
 
-  def collision?(barrier0, barrier1)
+  def collision?(barrier_x, barrier_y)
     #calculate distanct between cordinates and barrier coordinates.
-    if Gosu::distance(@x, @y, barrier0, barrier1) <= 0
-      return true
-    end
+    (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
   end
 end
 
