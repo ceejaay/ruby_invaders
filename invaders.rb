@@ -9,21 +9,41 @@ class SpaceInvader < Gosu::Window
     self.caption = "Space Invaders"
     @message = Gosu::Font.new(20)
     @player = Player.new
+    @bullets = Array.new
+    5.times {@bullets << Bullet.new(10, 400)}
+
   end
 
 
   def update
     @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
     @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
+    if @bullets.last.firing
+      @bullets.last.y -= 5
+      end
+
+
+
+#bullet motion goes here.
     #@player.y -= 2 unless @player.collision?(320, 300)
     #@player.y %= 480
     close if Gosu::button_down?(Gosu::KbEscape)
+  end
+
+  def button_down(id)
+    if id == Gosu::KbSpace
+      @bullets.last.x = @player.x
+      @bullets.last.y = @player.y
+      @bullets.last.firing = true
+      end
   end
 
   def draw
     @message.draw("Player X => #{@player.x} - Player Y => #{@player.y}", 10, 30, FONT_COLOR)
     @message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
     @player.draw
+    @bullets.last.draw
+    #@bullets.each {|item| draw.item}
   end
 
 
@@ -47,7 +67,7 @@ class Player
   end
 
   def right
-    @x += 7 
+    @x += 7
   end
 
   def collision?(barrier_x, barrier_y)
@@ -56,6 +76,25 @@ class Player
   end
 end
 
+class Bullet
+  attr_accessor :x, :y, :firing
+  def initialize(x, y)
+    @x = x
+    @y = y
+    @bullet = Gosu::Font.new(20)
+    @firing = false
+  end
+
+
+  def draw
+    @bullet.draw("i", @x, @y, FONT_COLOR)
+  end
+
+  def collision?(barrier_x, barrier_y)
+    #calculate distanct between cordinates and barrier coordinates.
+    (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
+  end
+end
 
 window = SpaceInvader.new
 window.show
