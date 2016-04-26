@@ -7,9 +7,10 @@ class SpaceInvader < Gosu::Window
     self.caption = "Space Invaders"
     @message = Gosu::Font.new(20)
     @player = Player.new
+    @bullet_animation = Gosu::Image.new("media/bullet.png")
+
     @bullets = Array.new
   end
-
   def update
     @bullets.each do |item|
       item.y -= 3
@@ -22,7 +23,7 @@ class SpaceInvader < Gosu::Window
 
   def button_down(id)
     if id == Gosu::KbSpace
-      @bullets.push(Bullet.new(@player.x, @player.y))
+      @bullets.push(Bullet.new(@player.x, @player.y, @bullet_animation))
     end
   end
 
@@ -55,21 +56,20 @@ class Player
   end
 
   def collision?(barrier_x, barrier_y)
-    #calculate distanct between cordinates and barrier coordinates.
     (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
   end
 end
 
 class Bullet
   attr_accessor :x, :y
-  def initialize(x, y)
+  def initialize(x, y, animation)
     @x = x
     @y = y
-    @bullet = Gosu::Font.new(20)
+    @animation = animation
   end
 
   def draw
-    @bullet.draw("i", @x, @y, FONT_COLOR)
+    @animation.draw_rot(@x, @y, 1, 0)
   end
 
   def collision?(barrier_x, barrier_y)
