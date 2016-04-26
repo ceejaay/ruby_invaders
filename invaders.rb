@@ -23,13 +23,12 @@ class SpaceInvader < Gosu::Window
   def button_down(id)
     if id == Gosu::KbSpace
       @bullets.push(Bullet.new(@player.x, @player.y))
-      puts @bullets.length
     end
   end
 
   def draw
-    @message.draw("Player X => #{@player.x} - Player Y => #{@player.y}", 10, 30, FONT_COLOR)
-    @message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
+    #@message.draw("Player X => #{@player.x} - Player Y => #{@player.y}", 10, 30, FONT_COLOR)
+    #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
     @player.draw
     @bullets.each {|item| item.draw}
   end
