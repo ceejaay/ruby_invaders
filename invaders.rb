@@ -8,9 +8,11 @@ class SpaceInvader < Gosu::Window
     @message = Gosu::Font.new(20)
     @player = Player.new
     @bullet_animation = Gosu::Image.new("media/bullet.png")
+    @invader_phalanx = Array.new
+    11.times {@invader_phalanx << Invader.new}
     @bullets = Array.new
-    @invader = Invader.new
   end
+
   def update
     @bullets.each do |item|
       item.y -= 3
@@ -19,21 +21,23 @@ class SpaceInvader < Gosu::Window
     @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
     @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
     close if Gosu::button_down?(Gosu::KbEscape)
-    @invader.invader_move
   end
 
   def button_down(id)
     if id == Gosu::KbSpace
-      @bullets.push(Bullet.new(@player.x, @player.y, @bullet_animation))
+      @bullets.push(Bullet.new(@player.x, @player.y, @bullet_animation)) unless @bullets.length == 1
     end
   end
 
   def draw
     @message.draw("Player X => #{@player.x} - Player Y => #{@player.y}", 10, 30, FONT_COLOR)
+    @message.draw("W => 640 - H => 480", 425, 30, FONT_COLOR)
     #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
     @player.draw
     @bullets.each {|item| item.draw}
-    @invader.draw
+    @invader_phalanx.each_with_index do |value, index|
+      value.draw((index * 58.2), 150)
+    end
   end
 end
 
@@ -65,17 +69,20 @@ end
 class Invader
   attr_accessor :x, :y
   def initialize
-    @x = 0
+    @x = 26
     @y = 150
     @sprite = Gosu::Image.new("media/invader.png")
   end
 
-  def draw
-    @sprite.draw_rot(@x, @y, 1, 0)
+  def draw(x, y)
+    @sprite.draw_rot(x, y, 1, 0)
   end
 
   def invader_move
-      @x += 7 unless @x >= 620
+    if @x >= 50
+      @x = 25
+      @x += 5
+      end
   end
 end
 
