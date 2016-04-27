@@ -15,9 +15,9 @@ class SpaceInvader < Gosu::Window
 
   def update
     @bullets.each do |item|
-      item.y -= 3
+      item.y -= 7
     end
-    @bullets.reject! {|bullet| bullet.y == 0}
+    @bullets.reject! {|bullet| bullet.collision?(bullet.x, 0)}
     @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
     @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
     close if Gosu::button_down?(Gosu::KbEscape)
@@ -30,13 +30,13 @@ class SpaceInvader < Gosu::Window
   end
 
   def draw
-    @message.draw("Player X => #{@player.x} - Player Y => #{@player.y}", 10, 30, FONT_COLOR)
+    @message.draw("Player X => #{}", 10, 30, FONT_COLOR)
     @message.draw("W => 640 - H => 480", 425, 30, FONT_COLOR)
     #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
     @player.draw
     @bullets.each {|item| item.draw}
     @invader_phalanx.each_with_index do |value, index|
-      value.draw((index * 58.2), 150)
+      value.draw((index * 60.2), 150)
     end
   end
 end
@@ -71,19 +71,14 @@ class Invader
   def initialize
     @x = 26
     @y = 150
-    @sprite = Gosu::Image.new("media/invader.png")
+    @sprite = Gosu::Image.new("media/invader.bmp")
   end
 
   def draw(x, y)
+#invader animation will go here.
     @sprite.draw_rot(x, y, 1, 0)
   end
 
-  def invader_move
-    if @x >= 50
-      @x = 25
-      @x += 5
-      end
-  end
 end
 
 class Bullet
@@ -95,6 +90,7 @@ class Bullet
   end
 
   def draw
+#bullet animation will go here
     @animation.draw_rot(@x, @y, 1, 0)
   end
 
