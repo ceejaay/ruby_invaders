@@ -23,9 +23,11 @@ class SpaceInvader < Gosu::Window
     if @bullet.out_of_range?
       @bullet.fire = false
     end
+    @invader_phalanx.each {|item| @bullet.fire = false if item.collision?(@bullet.x, @bullet.y)}
     @invader_phalanx.reject! do |alien_ship|
-      alien_ship.collision?(@bullet.x, @bullet.y)
+       alien_ship.collision?(@bullet.x, @bullet.y)
     end
+
     close if Gosu::button_down?(Gosu::KbEscape)
 
   end
