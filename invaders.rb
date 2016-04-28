@@ -9,7 +9,8 @@ class SpaceInvader < Gosu::Window
     @player = Player.new
     @bullet_animation = Gosu::Image.new("media/bullet.png")
     @bullet = Bullet.new(@bullet_animation)
-    @invader_phalanx = Array.new
+    @invader_phalanx = Array.new(11) {Invader.new}
+    @text_message = ""
   end
 
   def update
@@ -20,6 +21,11 @@ class SpaceInvader < Gosu::Window
     end
     if @bullet.out_of_range?
       @bullet.fire = false
+    end
+    if @bullet.x.between?(300, 400)
+      @text_message = "In the ZONE" 
+     else 
+       @text_message = "NO WAY"
     end
     close if Gosu::button_down?(Gosu::KbEscape)
   end
@@ -32,7 +38,7 @@ class SpaceInvader < Gosu::Window
   end
 
   def draw
-    @message.draw("Player X => #{}", 10, 30, FONT_COLOR)
+    @message.draw("#{@text_message}", 10, 30, FONT_COLOR)
     @message.draw("W => 640 - H => 480", 425, 30, FONT_COLOR)
     #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
 
@@ -82,6 +88,10 @@ class Invader
     @sprite.draw_rot(x, y, 1, 0)
   end
 
+  def collision?(barrier_x, barrier_y)
+    (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
+  end
+
 end
 
 class Bullet
@@ -100,10 +110,6 @@ class Bullet
 
   def out_of_range?
     @y <= 0
-  end
-
-  def collision?(barrier_x, barrier_y)
-    (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
   end
 end
 
