@@ -8,17 +8,26 @@ class SpaceInvader < Gosu::Window
     @message = Gosu::Font.new(20)
     @player = Player.new
     @bullet_animation = Gosu::Image.new("media/bullet.png")
+    @bullet = Bullet.new(@bullet_animation)
     @invader_phalanx = Array.new
   end
 
   def update
     @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
     @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
+    if @bullet.fire == true
+      @bullet.y -= 7
+    end
+    if @bullet.out_of_range?
+      @bullet.fire = false
+    end
     close if Gosu::button_down?(Gosu::KbEscape)
   end
 
   def button_down(id)
-    if id == Gosu::KbSpace
+    if id == Gosu::KbSpace && @bullet.fire == false
+      @bullet.fire = true
+      @bullet.x, @bullet.y = @player.x, @player.y
     end
   end
 
@@ -26,7 +35,9 @@ class SpaceInvader < Gosu::Window
     @message.draw("Player X => #{}", 10, 30, FONT_COLOR)
     @message.draw("W => 640 - H => 480", 425, 30, FONT_COLOR)
     #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
+
     @player.draw
+    @bullet.draw if @bullet.fire == true
     @invader_phalanx.each_with_index do |value, index|
       value.draw((index * 60.2), 150)
     end
@@ -74,11 +85,12 @@ class Invader
 end
 
 class Bullet
-  attr_accessor :x, :y
-  def initialize(x, y, animation)
+  attr_accessor :x, :y, :fire
+  def initialize(animation)
     @x = 0
     @y = 480
     @animation = animation
+    @fire = false
   end
 
   def draw
