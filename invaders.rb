@@ -9,7 +9,8 @@ class SpaceInvader < Gosu::Window
     @player = Player.new
     @bullet_animation = Gosu::Image.new("media/bullet.png")
     @bullet = Bullet.new(@bullet_animation)
-    @invader_phalanx = Array.new(11) {Invader.new}
+    i = 0
+    @invader_phalanx = Array.new(11) {Invader.new(i+=60, 150)}
     @text_message = ""
   end
 
@@ -22,18 +23,18 @@ class SpaceInvader < Gosu::Window
     if @bullet.out_of_range?
       @bullet.fire = false
     end
-    if @bullet.x.between?(300, 400)
-      @text_message = "In the ZONE" 
-     else 
-       @text_message = "NO WAY"
+    @invader_phalanx.reject! do |alien_ship|
+      alien_ship.collision?(@bullet.x, @bullet.y)
     end
     close if Gosu::button_down?(Gosu::KbEscape)
+
   end
 
   def button_down(id)
     if id == Gosu::KbSpace && @bullet.fire == false
       @bullet.fire = true
       @bullet.x, @bullet.y = @player.x, @player.y
+      puts @invader_phalanx.length
     end
   end
 
@@ -44,9 +45,8 @@ class SpaceInvader < Gosu::Window
 
     @player.draw
     @bullet.draw if @bullet.fire == true
-    @invader_phalanx.each_with_index do |value, index|
-      value.draw((index * 60.2), 150)
-    end
+    @invader_phalanx.each {|item| item.draw}
+
   end
 end
 
@@ -77,15 +77,15 @@ end
 
 class Invader
   attr_accessor :x, :y
-  def initialize
-    @x = 26
-    @y = 150
+  def initialize(x, y)
+    @x = x
+    @y = y
     @sprite = Gosu::Image.new("media/invader.bmp")
   end
 
-  def draw(x, y)
+  def draw
 #invader animation will go here.
-    @sprite.draw_rot(x, y, 1, 0)
+    @sprite.draw_rot(@x, @y, 1, 0)
   end
 
   def collision?(barrier_x, barrier_y)
