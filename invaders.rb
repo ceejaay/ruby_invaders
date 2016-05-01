@@ -17,13 +17,14 @@ class SpaceInvader < Gosu::Window
   def update
     @player.right if Gosu::button_down?(Gosu::KbRight) unless @player.collision?(640, 450)
     @player.left if Gosu::button_down?(Gosu::KbLeft) unless @player.collision?(0, 450)
+
     if @bullet.fire == true
       @bullet.y -= 10
     end
+
     if @bullet.out_of_range?
       @bullet.fire = false
     end
-    #@invader_phalanx.each {|item| @bullet.fire = false if item.collision?(@bullet.x, @bullet.y)}
 
     @invader_phalanx.each do |alien_ship|
       #this is where all the invader logic goes.
@@ -48,7 +49,6 @@ class SpaceInvader < Gosu::Window
   def draw
     @message.draw("#{@text_message}", 10, 30, FONT_COLOR)
     @message.draw("W => 640 - H => 480", 425, 30, FONT_COLOR)
-    #@message.draw("Distance from 0 => #{Gosu::distance(@player.x, @player.y, 320, 0)}", 10, 60, FONT_COLOR)
     @player.draw
     @bullet.draw if @bullet.fire == true
     @invader_phalanx.each {|item| item.draw if item.alive == true}
@@ -94,14 +94,9 @@ class Invader
     @sprite.draw_rot(@x, @y, 1, 0)
   end
 
-  def update(invader_array)
-
-  end
-
   def collision?(barrier_x, barrier_y)
     (@x.between?(barrier_x, barrier_x + 15) and @y.between?(barrier_y, barrier_y + 15)) || ((@x + 25).between?(barrier_x, barrier_x + 15) and (@y + 15).between?(barrier_y, barrier_y + 15))
   end
-
 end
 
 class Bullet
