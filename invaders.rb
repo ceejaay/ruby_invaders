@@ -9,8 +9,21 @@ class SpaceInvader < Gosu::Window
     @player = Player.new
     @bullet_animation = Gosu::Image.new("media/bullet.png")
     @bullet = Bullet.new(@bullet_animation)
+    coordinate_array = []
     i = 0
-    @invader_phalanx = Array.new(11) {Invader.new(i+=60, 150)}
+    11.times {coordinate_array << [i+=50, 150]}
+    i = 0
+    11.times {coordinate_array << [i+=50, 180]}
+    i = 0
+    11.times {coordinate_array << [i+=50, 210]}
+    i = 0
+    11.times {coordinate_array << [i+=50, 240]}
+    i = 0
+    11.times {coordinate_array << [i+=50, 270]}
+    @invader_phalanx = []
+    coordinate_array.each do |item|
+      @invader_phalanx << Invader.new(item[0], item[1])
+    end
     @text_message = ""
   end
 
