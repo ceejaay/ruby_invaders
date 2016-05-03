@@ -11,15 +11,15 @@ class SpaceInvader < Gosu::Window
     @bullet = Bullet.new(@bullet_animation)
     coordinate_array = []
     i = 0
-    11.times {coordinate_array << [i+=50, 150]}
+    11.times {coordinate_array << [i+=50, 140]}
     i = 0
     11.times {coordinate_array << [i+=50, 180]}
     i = 0
-    11.times {coordinate_array << [i+=50, 210]}
+    11.times {coordinate_array << [i+=50, 220]}
     i = 0
-    11.times {coordinate_array << [i+=50, 240]}
+    11.times {coordinate_array << [i+=50, 260]}
     i = 0
-    11.times {coordinate_array << [i+=50, 270]}
+    11.times {coordinate_array << [i+=50, 300]}
     @invader_phalanx = []
     coordinate_array.each do |item|
       @invader_phalanx << Invader.new(item[0], item[1])
