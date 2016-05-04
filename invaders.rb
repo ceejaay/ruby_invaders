@@ -55,7 +55,6 @@ class SpaceInvader < Gosu::Window
     if id == Gosu::KbSpace && @bullet.fire == false
       @bullet.fire = true
       @bullet.x, @bullet.y = @player.x, @player.y
-      puts @invader_phalanx.length
     end
   end
 
@@ -107,8 +106,9 @@ class Invader
     @sprite.draw_rot(@x, @y, 1, 0)
   end
 
+#this collision method is different than the player one. This is the one I wrote myself
   def collision?(barrier_x, barrier_y)
-    (@x.between?(barrier_x, barrier_x + 15) and @y.between?(barrier_y, barrier_y + 15)) || ((@x + 25).between?(barrier_x, barrier_x + 15) and (@y + 15).between?(barrier_y, barrier_y + 15))
+       (barrier_x.between?(@x - 10, @x) and barrier_y.between?(@y, @y + 10)) || (barrier_x.between?(@x, @x + 10) && barrier_y.between?(@y - 10, @y)) || (barrier_x.between?(@x - 10, @x) &&  barrier_y.between?(@y - 10, @y)) || (barrier_x.between?(@x, @x + 10) && barrier_y.between?(@y, @y + 10))
   end
 end
 
