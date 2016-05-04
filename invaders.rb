@@ -55,7 +55,6 @@ class SpaceInvader < Gosu::Window
     if id == Gosu::KbSpace && @bullet.fire == false
       @bullet.fire = true
       @bullet.x, @bullet.y = @player.x, @player.y
-      puts @invader_phalanx.length
     end
   end
 
