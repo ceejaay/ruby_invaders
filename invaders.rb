@@ -1,4 +1,7 @@
 require 'gosu'
+require './bullet'
+require './player'
+require './invader'
 FONT_COLOR = 0xff_ffff00
 
 class SpaceInvader < Gosu::Window
@@ -41,7 +44,7 @@ class SpaceInvader < Gosu::Window
 
     @invader_phalanx.each do |alien_ship|
       #this is where all the invader logic goes.
-      #alien_ship.move
+      alien_ship.move
       if alien_ship.collision?(@bullet.x, @bullet.y)
         alien_ship.alive = false
         #alien_ship.x, alien_ship.y = 250, 600
@@ -68,74 +71,6 @@ class SpaceInvader < Gosu::Window
     @player.draw
     @bullet.draw if @bullet.fire == true
     @invader_phalanx.each {|item| item.draw if item.alive == true}
-  end
-end
-
-class Player
-  attr_accessor :x, :y, :ammo
-  def initialize
-    @x = 320
-    @y = 450
-    @sprite = Gosu::Image.new("media/icon.png")
-  end
-
-  def draw
-    @sprite.draw_rot(@x, @y, 1, 0)
-  end
-
-  def left
-    @x -= 7
-  end
-
-  def right
-    @x += 7
-  end
-
-  def collision?(barrier_x, barrier_y)
-    (@x.between?(barrier_x, barrier_x + 30) and @y.between?(barrier_y, barrier_y + 30)) || ((@x + 30).between?(barrier_x, barrier_x +30) and (@y + 30).between?(barrier_y, barrier_y + 30))
-  end
-end
-
-class Invader
-  attr_accessor :x, :y, :alive
-  def initialize(x, y)
-    @x = x
-    @y = y
-    @sprite = Gosu::Image.new("media/invader.png")
-    @alive = true
-  end
-
-  def draw
-#invader animation will go here.
-    @sprite.draw_rot(@x, @y, 1, 0)
-  end
-
-#this collision method is different than the player one. This is the one I wrote myself
-  def collision?(barrier_x, barrier_y)
-       (barrier_x.between?(@x - 10, @x) and barrier_y.between?(@y, @y + 10)) || (barrier_x.between?(@x, @x + 10) && barrier_y.between?(@y - 10, @y)) || (barrier_x.between?(@x - 10, @x) &&  barrier_y.between?(@y - 10, @y)) || (barrier_x.between?(@x, @x + 10) && barrier_y.between?(@y, @y + 10))
-  end
-
-  def move
-       puts  Gosu::distance(@x, @y, 55, @y)
-  end
-end
-
-class Bullet
-  attr_accessor :x, :y, :fire
-  def initialize(animation)
-    @x = 0
-    @y = 480
-    @animation = animation
-    @fire = false
-  end
-
-  def draw
-#bullet animation will go here
-    @animation.draw_rot(@x, @y, 1, 0)
-  end
-
-  def out_of_range?
-    @y <= 0
   end
 end
 
