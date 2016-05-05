@@ -41,13 +41,14 @@ class SpaceInvader < Gosu::Window
 
     @invader_phalanx.each do |alien_ship|
       #this is where all the invader logic goes.
-      alien_ship.move
+      #alien_ship.move
       if alien_ship.collision?(@bullet.x, @bullet.y)
         alien_ship.alive = false
-        alien_ship.x, alien_ship.y = 250, 600
+        #alien_ship.x, alien_ship.y = 250, 600
         @bullet.fire = false
       end
     end
+    @invader_phalanx.reject! {|item| item.alive == false}
 
 
     close if Gosu::button_down?(Gosu::KbEscape)
@@ -57,6 +58,7 @@ class SpaceInvader < Gosu::Window
     if id == Gosu::KbSpace && @bullet.fire == false
       @bullet.fire = true
       @bullet.x, @bullet.y = @player.x, @player.y
+      puts @invader_phalanx.length
     end
   end
 
@@ -114,11 +116,7 @@ class Invader
   end
 
   def move
-      if  Gosu::distance(@x, @y, 0, @y) < 10
-        puts "True"
-      else
-        puts "False"
-        end
+       puts  Gosu::distance(@x, @y, 55, @y)
   end
 end
 
