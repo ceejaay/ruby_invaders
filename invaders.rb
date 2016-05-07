@@ -1,7 +1,7 @@
 require 'gosu'
 require './bullet'
 require './player'
-require './invader'
+require './class_invader'
 FONT_COLOR = 0xff_ffff00
 
 class SpaceInvader < Gosu::Window
