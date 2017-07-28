@@ -13,7 +13,12 @@ class SpaceInvader < Gosu::Window
     @bullet_animation = Gosu::Image.new("media/bullet.png")
     @bullet = Bullet.new(@bullet_animation)
     @text_message = ""
-    @invader_phalanx = [Invader.new(100, 100)]
+    @invader_phalanx = []
+    4.times do |y|
+      10.times do |x|
+        @invader_phalanx << Invader.new((x * 50) + 100, (y * 50) + 100)
+      end
+    end
   end
 
   def update
