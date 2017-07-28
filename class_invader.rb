@@ -5,6 +5,9 @@ class Invader
     @y = y
     @sprite = Gosu::Image.new("media/invader.png")
     @alive = true
+    @right_side = @x + 50
+    @left_side = @x - 50
+    @move_left = true
   end
 
   def draw
@@ -18,7 +21,16 @@ class Invader
   end
 
   def move
-    @x += 1
+    if @move_left == true and @x > @left_side
+        @x -= 1
+    else
+       @move_left = false
+      end
+    if @move_left == false and @x < @right_side
+      @x += 1
+    else
+       @move_left = true
+    end
     #puts  Gosu::distance(@x, @y, 55, @y)
   end
 end
